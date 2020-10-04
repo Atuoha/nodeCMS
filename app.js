@@ -6,7 +6,7 @@ const Handlebars = require('Handlebars')
 const port = 1234 || process.env.Port;
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access')
+const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access');
 
 
 mongoose.connect('mongodb://localhost:27017/nodeCms', {useNewUrlParser: true, useUnifiedTopology: true })

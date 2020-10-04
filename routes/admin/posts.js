@@ -1,6 +1,7 @@
 const express =  require('express');
 const router = express.Router();
 const Post = require('../../models/Post')
+const faker = require('faker');
 
 //settting default layout
 router.all('/*', (req, res, next)=>{
@@ -124,6 +125,36 @@ router.get('/:id/delete', (req, res)=>{
 })
 
 
+
+// generate dummy  data url to view page
+router.get('/dummy', (req, res)=>{
+    res.render('admin/dummy')
+})
+
+
+// posting dummy data using faker module
+router.post('/generate-fake-posts', (req, res)=>{
+
+    for(let i = 0; i < req.body.number; i++){
+        let post = new Post()
+
+        post.title = faker.name.title();
+        post.sub = faker.name.suffix();
+        post.category = faker.lorem.words();
+        post.status = 'public';
+        post.allowComments = faker.random.boolean();
+        post.body = faker.lorem.sentence();
+        post.date = new Date()
+
+        post.save()
+        .then(posts =>{
+            console.log(posts);
+            res.redirect('/admin/posts')
+        })
+        .catch(err => console.log(err))
+    }
+
+})
 
 // exporting router so that it can be used in app.js
 module.exports = router;
