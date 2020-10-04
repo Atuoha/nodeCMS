@@ -23,7 +23,6 @@ const PostSchema = new Schema({
 
     allowComments: {
         type: Boolean,
-        default: true,
     },
 
     status: {
@@ -33,7 +32,6 @@ const PostSchema = new Schema({
     },
 
     imagery: {
-        required: true,
         type: String,
     },
 
@@ -41,6 +39,10 @@ const PostSchema = new Schema({
         required: true,
         type: String,
         minLength: 20,
+    },
+
+    date:{
+        type: Date
     },
 
 })

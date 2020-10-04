@@ -10,6 +10,7 @@
   "author": "Atuoha Anthony",
   "license": "ISC",
   "dependencies": {
+    "@handlebars/allow-prototype-access": "^1.0.3",
     "axios": "^0.20.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
@@ -17,12 +18,14 @@
     "express": "^4.17.1",
     "express-handlebars": "^5.1.0",
     "express-handler": "^0.2.0",
+    "faker": "^5.1.0",
     "mongodb": "^3.6.2",
     "mongoose": "^5.10.6",
     "postman-collection": "^3.6.7",
     "ws": "^7.3.1"
   },
   "devDependencies": {
+    "handlebars": "^4.7.6",
     "nodemon": "^2.0.4"
   }
 }

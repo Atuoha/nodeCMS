@@ -1,18 +1,23 @@
 <h3>Edit Post</h3>
 
+{{#each post}}
+
+
+
+
 <div class="card ">
     <div class="card-header">Edit a post by filling this form....</div>
       <div class="card-body">
-            <form method="post" id="edit-post">
+            <form method="post" id="create-post" encypt-type="multipart/form-data" action="/admin/posts/{{id}}/update">
                 <div class="form-group">
                     <div class="form-row">
                         <div class="col-md-6">
-                            <label for="exampleInputName">Title</label>
-                            <input class="form-control" id="exampleInputName" type="text" aria-describedby="nameHelp" placeholder="Enter Post Title">
+                            <label for="title">Title</label>
+                            <input name="title" value="{{title}}" class="form-control" id="title" required validate  type="text" aria-describedby="nameHelp" placeholder="Enter Post Title">
                         </div>
                         <div class="col-md-6">
-                            <label for="exampleInputLastName">Sub-Title</label>
-                            <input class="form-control" id="exampleInputLastName" type="text" aria-describedby="nameHelp" placeholder="Enter Sub-Title">
+                            <label for="sub">Sub-Title</label>
+                            <input name="sub" value="{{sub}}" class="form-control" id="sub" required validate type="text" aria-describedby="nameHelp" placeholder="Enter Sub-Title">
                         </div>
                     </div>
                 </div>
@@ -21,33 +26,101 @@
                 <div class="form-group">
                     <div class="form-row">
                         <div class="col-md-6">
-                            <label for="exampleInputName">Category</label>
-                            <input class="form-control" id="exampleInputName" type="text" aria-describedby="nameHelp" placeholder="Enter Post Category">
+                            <label for="category">Category</label>
+                             <select class="form-control" value="{{category}}" name="category" required validate  id="category">
+                               {{#select category}}    
+                                <option value="Travel/Tour">Travel/Tour</option>
+                                <option value="Adventures">Adventures</option>
+                                <option value="Others">Others</option>
+                              {{/select}}
+                                
+                            </select> 
                         </div>
                         <div class="col-md-6">
-                            <label for="exampleInputLastName">Author</label>
-                            <input class="form-control" id="exampleInputLastName" type="text" aria-describedby="nameHelp" placeholder="Enter Author">
+                           <label for="status">Status</label>
+                            <select class="form-control" value="{{status}}" name="status" required validate  id="status">
+                            {{#select status}} 
+                                <option value="Public">Public</option>
+                                <option value="Private">Private</option>
+                                <option value="Draft">Draft</option>
+                            {{/select}}
+
+                            </select> 
                         </div>
                     </div>
                 </div>
 
 
+            
+                <div class="form-group">
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <label for="exampleInputLastName">Imagery</label>
+                            <input accept="image/*" value="{{imagery}}" name="imagery" class="form-control" id="inpFile"  validate type="file" aria-describedby="nameHelp" >
+                        </div>
+
+                        <div class="col-md-6">
+                             <div class="image-preview pull-right" id="imagePreview">
+                            <img width="100" class="img-circle img-thumbnail image-preview__image" src="/uploads/img_place.png" alt=""> 
+                            <span class="image-preview__default-text"> </span>
+                          </div>
+                    </div>
+                </div>
+
+                
                 <div class="form-group">
                     <div class="form-row">
                         <div class="col-md-12">
                             <label for="textarea">Content</label>
-                            <textarea name="" class="form-control" id="textarea" cols="30" rows="10"></textarea>
+                            <textarea name="body" class="form-control" id="textarea" required validate cols="30" rows="10">{{body}}</textarea>
                         </div>
                     </div>                  
                 </div>
 
                 <div class="form-group">
-                    <button class="btn btn-primary btn-block" type="submit">Publish Post</button>
+                    <label for="allowComments">
+                    <input type="checkbox" {{#if allowComments}} checked="checked"  {{/if}} name="allowComments"  id="allowComments">
+                    Allow Comments
+                    </label>
                 </div>
 
+                <div class="form-group">
+                    <button class="btn btn-primary" type="submit">Edit Post</button>
+                </div>
 
+{{/each}}
             </form>
         </div>
     </div>
 </div>
 
+
+
+<!-- SCRIPTING FOR PREVIEWING IMAGE BEFORE UPLOADING USING PHP -->
+<script>
+
+    const inpFile = document.getElementById('inpFile');
+    const previewContainer = document.getElementById('imagePreview');
+    const previewImage = document.querySelector('.image-preview__image');
+    const previewDefault = document.querySelector('.image-preview__default-text');
+
+    inpFile.addEventListener('change',function(){
+        const file = this.files[0];
+
+        if(file){
+            const reader = new FileReader();
+            previewDefault.style.display = 'none';
+            previewImage.style.display = 'block';
+
+            reader.addEventListener('load',function(){
+                previewImage.setAttribute('src',this.result);
+                previewImage.style.width = '130px';
+            });
+            reader.readAsDataURL(file)
+        }else{
+            previewDefault.style.display = 'block';
+            previewImage.style.display = 'none';
+            previewImage.setAttribute('src',"");
+        }
+    })
+</script>

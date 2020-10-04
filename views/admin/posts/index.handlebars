@@ -9,9 +9,10 @@
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
+                    {{!-- <th>Id</th> --}}
                     <th>Title</th>
                     <th>Sub</th>
-                    <th>Author</th>
+                    <th>Status</th>
                     <th>Category</th>
                     <th>Content</th>
                     <th>Allow Comments</th>
@@ -21,21 +22,29 @@
                 </thead>
                 
                 <tbody>
+                    {{#each posts}}
                     <tr>
-                    <td>Post Title</td>
-                    <td>Post Sub Title</td>
-                    <td>Edinburgh</td>
-                    <td>Food</td>
-                    <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet pariatur 
-                        enim veritatis obcaecati quibusdam accusamus recusandae 
-                        eos repudiandae nostrum.
+                    {{!-- <td>{{id}}</td> --}}
+                    <td>{{title}}</td>
+                    <td>{{sub}}</td>
+                    <td>{{status}}</td>
+                    <td>{{category}}</td>
+                    <td>{{body}}</td>
+                    <td>{{allowComments}}</td>
+                    <td>{{date}}</td>
+                    <td><a class="btn btn-success" href="/admin/posts/{{id}}/edit">Edit</a></td>
+                    <td><a class="btn btn-danger" href="/admin/posts/{{id}}/delete">Delete</a>
+                    
+                    {{!-- <form action="/admin/posts/{{id}}/delete?_method=DELETE" method="POST">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form> --}}  
+                    {{!-- You can use the form for conventional delete request purposes or just use the link which initiates a get request --}}
                     </td>
-                    <td>2011/04/25</td>
-                    <td>
-                        <a class="btn btn-success">Edit</a>
-                        <a class="btn btn-danger">Delete</a>
-                    </td>
+
+                    
                     </tr>
+
+                    {{/each}}
                </tbody>
             </table> 
         </div>
