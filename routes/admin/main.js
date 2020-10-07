@@ -9,6 +9,13 @@ router.all('/*', (req, res, next)=>{
 
 router.get('/', (req, res)=>{
     res.render('admin/index')
+
+    // Session Usage
+    // req.session.tony = "Atuoha Anthony";
+    // if(req.session.tony){
+    //     console.log(`Am ${req.session.tony}`)
+    // }
+
 });
 
 

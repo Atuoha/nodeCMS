@@ -31,8 +31,9 @@ const PostSchema = new Schema({
         minLength: 5,
     },
 
-    imagery: {
+    file: {
         type: String,
+        
     },
 
     body: {

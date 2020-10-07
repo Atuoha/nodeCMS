@@ -2,6 +2,9 @@ const express =  require('express');
 const router = express.Router();
 const Post = require('../../models/Post')
 const faker = require('faker');
+const { isEmpty, uploadDir } = require('../../helpers/upload-helper');
+const path = require('path');
+const fs = require('fs');
 
 //settting default layout
 router.all('/*', (req, res, next)=>{
@@ -17,7 +20,7 @@ router.get('/', (req, res)=>{
     Post.find({})
     .then(posts=> {
         res.render('admin/posts', {posts: posts})
-        console.log(posts)
+        // console.log(posts)
     })
     .catch(err=> console.log(`Post Error: err`))
     
@@ -32,6 +35,41 @@ router.get('/create', (req, res)=>{
 // creating post
 router.post('/create', (req, res)=>{
 
+    let errors = [];
+
+    if(!req.body.title){
+        errors.push({message: 'Please add title'})
+    }
+
+    if(!req.body.body){
+        errors.push({message: 'Please add body'})
+    }
+
+    if(!req.body.sub){
+        errors.push({message: 'Please add sub title'})
+    }
+
+    if(errors.length > 0){
+        res.render('admin/posts/create-post', {errors: errors})
+    }else{
+
+
+    let filename = Date.now() + '-' + 'img_place.png';
+
+    if(!isEmpty(req.files)){
+
+         // uploading file
+    file = req.files.file
+    filename = Date.now() + '-' + file.name
+    let dirUpload = './public/uploads/'
+    file.mv(dirUpload + filename, err=>{
+        if(err) throw err;
+    })
+    //
+
+    }
+
+    
     let allowComments = true;
 
     if(req.body.allowComments){
@@ -47,15 +85,22 @@ router.post('/create', (req, res)=>{
             status: req.body.status,
             category: req.body.category,
             allowComments: allowComments,
-            imagery: req.body.imagery,
+            file: filename,
             body: req.body.body,
             date: new Date(),
         }
     )
     newPost.save()
-    .then(response=> console.log('Sent'))
+    .then(post=> {
+        console.log(`Sent Post: ${post}`);
+        req.flash('success_msg', `Post :${post.title} has been created :)`)
+        // console.log(req.flash('success_msg'));
+        res.redirect('/admin/posts')
+
+    })
     .catch(err=> console.log(err))
-    res.redirect('/admin/posts')
+
+    }
     // res.send(`<p class="alert alert-success">Post created -Title: ${req.body.title}</p>`)
 });
 
@@ -76,6 +121,8 @@ router.get('/:id/edit', (req, res)=>{
 // updating post using id
 // router.put('/:id/update',  (req, res)=>{
 router.post('/:id/update',  (req, res)=>{
+   
+
     let allowComments = true;
     if(req.body.allowComments){
         allowComments = true;
@@ -86,19 +133,31 @@ router.post('/:id/update',  (req, res)=>{
     Post.findOne(
         {_id: req.params.id})
     .then(post=>{
+
         console.log(post)
+
+        let filename = post.file;
+        if(!isEmpty(req.files)){
+            let file = req.files.file
+            filename = Date.now() + '-' + file.name
+            file.mv('./public/uploads/' + filename, err=>{
+                if(err) throw err;
+            })
+        }
+
         post.title = req.body.title;
         post.sub = req.body.sub;
         post.status = req.body.status;
         post.category = req.body.category;
         post.body = req.body.body;
         post.allowComments = allowComments;
-        post.imagery = req.body.imagery;
+        post.file = filename;
 
         post.save()
          .then(updatedPost =>{
             console.log(`New Post: ${updatedPost}`);
             console.log('Updated Successfully');
+            req.flash('success_msg', `Post has successfully been updated. New title is ${updatedPost.title}`)
             res.redirect('/admin/posts');
          })
          .catch(err => console.log(`Updating Error from: ${err}`))
@@ -116,10 +175,20 @@ router.get('/:id/delete', (req, res)=>{
     Post.findOne({_id: req.params.id})   //you can still use remove function here but you won't be needing the "post.delete()" again to implement it
     .then(post=>{
         console.log(post)
+        if(post.file !== 'img_place.png'){ // I used img_place.png for a default image for dummy post and i don't want to delete it
+            fs.unlink('./public/uploads/' + post.file, err=>{
+                if(err) throw err;
+            })
+        }
+       
         post.delete()
-         .then(response => console.log(`Post Deleted: ${response}`))
+         .then(post => {
+            console.log(`Post Deleted: ${post}`);
+            req.flash('success_msg', `${post.title} has been deleted without errors :)`)
+            res.redirect('/admin/posts')
+
+        })
          .catch(err => console.log(`Deleting Error from: ${err}`))
-         res.redirect('/admin/posts')
     })
     .catch(err => console.log(`Error: ${err}`))
 })
@@ -139,20 +208,25 @@ router.post('/generate-fake-posts', (req, res)=>{
         let post = new Post()
 
         post.title = faker.name.title();
-        post.sub = faker.name.suffix();
-        post.category = faker.lorem.words();
+        post.sub = faker.random.words();
+        post.category = faker.lorem.word();
         post.status = 'public';
         post.allowComments = faker.random.boolean();
         post.body = faker.lorem.sentence();
+        post.file = 'img_place.png';
         post.date = new Date()
 
         post.save()
         .then(posts =>{
             console.log(posts);
+            req.flash('success_msg', `Created ${req.body.number} dummy post(s) :)`)
             res.redirect('/admin/posts')
+
         })
         .catch(err => console.log(err))
     }
+
+
 
 })
 

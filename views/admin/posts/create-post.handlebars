@@ -1,9 +1,15 @@
 <h3>Create Post</h3>
 
+{{#each errors}}
+
+    <div class="alert alert-danger">{{message}}</div>
+
+{{/each}}
+
 <div class="card ">
     <div class="card-header">Create a post by filling this form....</div>
       <div class="card-body">
-            <form method="post" id="create-post" encypt-type="multipart/form-data" action="/admin/posts/create">
+            <form method="post" id="create-post" enctype="multipart/form-data" action="/admin/posts/create">
                 <div class="form-group">
                     <div class="form-row">
                         <div class="col-md-6">
@@ -45,7 +51,7 @@
                     <div class="form-row">
                         <div class="col-md-6">
                             <label for="exampleInputLastName">Imagery</label>
-                            <input accept="image/*" name="imagery" class="form-control" id="inpFile" required validate type="file" aria-describedby="nameHelp" >
+                            <input accept="image/*" name="file" class="form-control" id="inpFile" required validate type="file" aria-describedby="nameHelp" >
                         </div>
 
                         <div class="col-md-6">

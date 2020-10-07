@@ -8,7 +8,8 @@
 <div class="card ">
     <div class="card-header">Edit a post by filling this form....</div>
       <div class="card-body">
-            <form method="post" id="create-post" encypt-type="multipart/form-data" action="/admin/posts/{{id}}/update">
+            <form method="post" id="create-post" enctype="multipart/form-data" action="/admin/posts/{{id}}/update">
+            {{!-- action="/admin/posts/{{id}}/update?_method=PUT" --}}
                 <div class="form-group">
                     <div class="form-row">
                         <div class="col-md-6">
@@ -56,7 +57,7 @@
                     <div class="form-row">
                         <div class="col-md-6">
                             <label for="exampleInputLastName">Imagery</label>
-                            <input accept="image/*" value="{{imagery}}" name="imagery" class="form-control" id="inpFile"  validate type="file" aria-describedby="nameHelp" >
+                            <input accept="image/*" value="{{imagery}}" name="file" class="form-control" id="inpFile"  validate type="file" aria-describedby="nameHelp" >
                         </div>
 
                         <div class="col-md-6">
