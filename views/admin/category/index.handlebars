@@ -48,7 +48,7 @@
              {{#each categories}}
                    <tr>  
                     <td class="title">{{title}}</td>
-                    <td>{{date}}</td>
+                    <td>{{generate_date date 'MMM-Do-Y'}} </td>
                     <td><a class="btn btn-success edit" rel="{{title}}" href="/admin/categories/{{id}}/edit" id="btn-edit">Edit</a></td>
                     <td><a class="btn btn-danger" href="/admin/categories/{{id}}/delete">Delete</a>
                  </tr>
@@ -117,7 +117,6 @@
         $('#editing').attr('action', action);
         $('.lead').html(`Edit Category | ${title}`)
         $('#dummy-form').fadeOut('slow');
-        $('#create-form').fadeOut('slow');
         $('#edit-form').fadeIn('slow');
         console.log(title)
 

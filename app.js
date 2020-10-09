@@ -22,14 +22,15 @@ app.use(express.static(path.join(__dirname, 'public'))) // Loading Static files 
 
 
 // custom select handlebars function
-const {select} = require('./helpers/handlebars-helpers')
+const {select, generate_date} = require('./helpers/handlebars-helpers')
+
 
 
 // --SETTING view engine using handlebars
 app.engine('handlebars', handlebars(
     {
         defaultLayout: 'home',
-        helpers:{select: select},
+        helpers:{select: select, generate_date: generate_date},
         partialsDir: path.join(__dirname, "views/layouts/partials"),
         handlebars: allowInsecurePrototypeAccess(Handlebars)
     
