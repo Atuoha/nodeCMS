@@ -16,9 +16,8 @@ const PostSchema = new Schema({
     },
 
     category: {
-        required: true,
-        type: String,
-        minLength: 5,
+        type: Schema.Types.ObjectId,
+        ref: 'categories',
     },
 
     allowComments: {

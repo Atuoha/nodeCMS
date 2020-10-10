@@ -29,10 +29,9 @@
                         <div class="col-md-6">
                             <label for="category">Category</label>
                              <select class="form-control" name="category" required validate  id="category">
-                                <option value="Travel/Tour">Travel/Tour</option>
-                                <option value="Adventures">Adventures</option>
-                                <option value="Others">Others</option>
-
+                                {{#each categories}}
+                                     <option value="{{id}}">{{title}}</option>
+                                {{/each}}
                             </select> 
                         </div>
                         <div class="col-md-6">

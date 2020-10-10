@@ -5,6 +5,8 @@ const faker = require('faker');
 const { isEmpty, uploadDir } = require('../../helpers/upload-helper');
 const path = require('path');
 const fs = require('fs');
+const Category = require('../../models/Category')
+
 
 //settting default layout
 router.all('/*', (req, res, next)=>{
@@ -18,6 +20,7 @@ router.all('/*', (req, res, next)=>{
 router.get('/', (req, res)=>{
 
     Post.find({})
+    .populate('category')
     .then(posts=> {
         res.render('admin/posts', {posts: posts})
         // console.log(posts)
@@ -28,7 +31,11 @@ router.get('/', (req, res)=>{
 
 //viewing creating post page
 router.get('/create', (req, res)=>{
-    res.render('admin/posts/create-post')
+
+    Category.find()
+     .then(categories =>{
+         res.render('admin/posts/create-post', {categories: categories })
+     })
 });
 
 
@@ -108,12 +115,15 @@ router.post('/create', (req, res)=>{
 // viewing edit page using id
 router.get('/:id/edit', (req, res)=>{
 
-    Post.find({_id: req.params.id})
+    Post.findOne({_id: req.params.id})
     .then(post=>{
-        console.log(`Single post: ${post}`);
-        res.render('admin/posts/edit', {post: post})
+        Category.find()
+        .then(categories =>{
+            console.log(`Single post: ${post}`);
+            res.render('admin/posts/edit', {post: post, categories: categories})
+            console.log(categories)
+        })        
     })
-    .catch(err=> console.log(`Error with pulling single post: ${err}`))
 })
 
 
