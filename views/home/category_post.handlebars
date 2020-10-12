@@ -1,0 +1,43 @@
+ <div class="row">
+
+<!-- Blog Entries Column -->
+<div class="col-md-8">
+
+    <h3 class="my-4">N0deCMS 
+    <small>...building blocks</small>
+    </h3>
+
+ {{#each posts}}
+    <!-- Blog Post -->
+    <div class="card mb-4">
+    <img class="card-img-top" src="/uploads/{{file}}" width="100" alt="Card image cap">
+    <div class="card-body">
+        <h2 class="card-title">{{title}}</h2>
+        <p class="card-text">{{body}}</p>
+        <a href="/single_post/{{id}}" class="btn btn-primary">Read More &rarr;</a>
+    </div>
+    <div class="card-footer text-muted">
+        Posted on {{generate_date date 'MMM-Do-Y'}}  by
+        <a href="#">Tony Atuoha</a>
+    </div>
+    </div>
+
+{{/each}}    
+
+    <!-- Pagination -->
+    <ul class="pagination justify-content-center mb-4">
+    <li class="page-item">
+        <a class="page-link" href="#">&larr; Older</a>
+    </li>
+    <li class="page-item disabled">
+        <a class="page-link" href="#">Newer &rarr;</a>
+    </li>
+    </ul>
+
+</div>
+
+<!-- Sidebar Widgets Column -->
+{{> home/sidebar}}
+
+</div>
+<!-- /.row -->

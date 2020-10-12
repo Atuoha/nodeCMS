@@ -11,6 +11,9 @@ const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-acce
 const upload = require('express-fileupload');
 const session = require('express-session');
 const flash = require('connect-flash')
+const passport = require('passport')
+// const {mongoDbURl} = require('./config/database')
+
 
 mongoose.Promise = global.Promise;
 
@@ -62,9 +65,16 @@ app.use(session({
 // Flash Middleware
 app.use( flash() );
 
+//Passport inits
+app.use(passport.initialize());
+app.use(passport.session());
+
 // sETTing local variable for flash msgs
 app.use( (req, res, next)=>{
     res.locals.success_msg = req.flash('success_msg');
+    res.locals.error_msg = req.flash('error_msg');
+    res.locals.error = req.flash('error');
+
 
     next();
 })
@@ -93,6 +103,10 @@ app.use('/admin/posts', posts)
 // -- admin categories
 const category = require('./routes/admin/category');
 app.use('/admin/categories', category)
+
+// -- admin users
+const user = require('./routes/admin/user');
+app.use('/admin/users', user);
 
 app.listen(port, ()=>{
     console.log(`listening to port: ${port}`)
