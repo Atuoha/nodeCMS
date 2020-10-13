@@ -9,16 +9,16 @@
 <div class="card ">
     <div class="card-header">Edit a user by filling this form....</div>
       <div class="card-body">
-            <form method="post" id="Edit-user" enctype="multipart/form-data" action="/admin/posts/edit">
+            <form method="post" id="Edit-user" enctype="multipart/form-data" action="/admin/users/{{user.id}}/update">
                 <div class="form-group">
                     <div class="form-row">
                         <div class="col-md-6">
                             <label for="title">Fullname</label>
-                            <input name="fullname" class="form-control" id="title" required validate  type="text" aria-describedby="nameHelp" placeholder="Enter Fullname ">
+                            <input value="{{user.fullname}}" name="fullname" class="form-control" id="title" required validate  type="text" aria-describedby="nameHelp" placeholder="Enter Fullname ">
                         </div>
                         <div class="col-md-6">
                             <label for="sub">Email</label>
-                            <input name="email" class="form-control" id="sub" required validate type="email" aria-describedby="nameHelp" placeholder="Enter Email">
+                            <input value="{{user.email}}" name="email" class="form-control" id="sub" required validate type="email" aria-describedby="nameHelp" placeholder="Enter Email">
                         </div>
                     </div>
                 </div>
@@ -28,13 +28,15 @@
                     <div class="form-row">
                         <div class="col-md-6">
                             <label for="category">Password</label>
-                              <input name="password" class="form-control" id="sub" required validate type="password" aria-describedby="nameHelp" placeholder="Enter Password">
+                              <input name="password" class="form-control" id="sub"  validate type="password" aria-describedby="nameHelp" placeholder="Enter Password">
                         </div>
                         <div class="col-md-6">
                            <label for="status">Role</label>
-                            <select class="form-control" name="role" required validate  id="status">
+                            <select value="{{user.role}}" class="form-control" name="role" required validate  id="status">
+                                {{#select user.role}}
                                 <option value="Admin">Admin</option>
                                 <option value="Subscriber">Subscriber</option>
+                                {{/select}}
                             </select> 
                         </div>
                     </div>
@@ -45,12 +47,12 @@
                     <div class="form-row">
                         <div class="col-md-6">
                             <label for="exampleInputLastName">Imagery</label>
-                            <input accept="image/*" name="file" class="form-control" id="inpFile" required validate type="file" aria-describedby="nameHelp" >
+                            <input accept="image/*" name="file" class="form-control" id="inpFile" validate type="file" aria-describedby="nameHelp" >
                         </div>
 
                         <div class="col-md-6">
                              <div class="image-preview pull-right" id="imagePreview">
-                            <img width="100" class="img-circle img-thumbnail image-preview__image" src="/uploads/img_place.png" alt=""> 
+                            {{#if user.file}}<img width="100" class="img-circle img-thumbnail image-preview__image" src="/uploads/{{user.file}}" alt=""> {{else}} <img width="100" class="img-circle img-thumbnail image-preview__image" src="/uploads/default.png" alt="">  {{/if}}
                             <span class="image-preview__default-text"> </span>
                           </div>
                     </div>
@@ -59,9 +61,11 @@
                 <div class="form-group">
                     <div class="col-md-6">
                            <label for="status">Status</label>
-                            <select class="form-control" name="status" required validate  id="status">
+                            <select value="{{user.status}}" class="form-control" name="status" required validate  id="status">
+                                {{#select user.status}}
                                 <option value="Active">Active</option>
                                 <option value="Unactive">Unactive</option>
+                                {{/select}}
                             </select> 
                     </div>
                 </div>    
@@ -69,7 +73,7 @@
                 
                 <br>
                 <div class="form-group">
-                    <button class="btn btn-primary" type="submit">Edit User</button>
+                    <button class="btn btn-primary" type="submit">Update User</button>
                 </div>
 
 

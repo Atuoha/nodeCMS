@@ -3,12 +3,15 @@ const app = express();
 const router = express.Router();
 const Category = require('../../models/Category')
 const faker = require('faker')
+const {userAuth} = require('../../helpers/authenticate')
 
-router.get('/*', (req, res, next)=>{
 
-    res.app.locals.layout = 'admin'
 
-    next()
+//settting default layout
+router.all('/*', userAuth,  (req, res, next)=>{
+
+    req.app.locals.layout = 'admin';
+    next();
 })
 
 router.get('/', (req, res)=>{

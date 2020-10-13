@@ -1,6 +1,8 @@
 <h3>Users</h3>
 
-{{> admin/flash_msgs }}
+{{#if success_msg}}
+<div class="alert alert-success">{{ success_msg }}</div>
+{{/if}}
 
 <div class="card ">
     <div class="card-header">
@@ -14,6 +16,8 @@
                     {{!-- <th>Id</th> --}}
                     <th>Fullname</th>
                     <th>Email</th>
+                    <th>Role</th>
+                    <th>Status</th>
                     <th>Imagery</th>
                     <th>Date</th>
                     <th>Action</th>
@@ -26,11 +30,15 @@
                     {{!-- <td>{{id}}</td> --}}
                     <td>{{fullname}}</td>
                     <td>{{email}}</td>
-                    <td>{{allowComments}}</td>
-                    <td><img src="/uploads/{{file}}" width="100" alt=""></td>
+                    <td>{{role}}</td>
+                    <td>{{status}}</td>
+                    <td>
+                        {{#if file}}<img src="/uploads/{{file}}" width="100" alt="">
+                        {{else}} <img src="/uploads/default.png" width="100" alt="">{{/if}} 
+                    </td>
                     <td>{{generate_date date 'MMM-Do-Y'}} </td>
-                    <td><a class="btn btn-success" href="/admin/posts/{{id}}/edit">Edit</a></td>
-                    <td><a class="btn btn-danger" href="/admin/posts/{{id}}/delete">Delete</a>
+                    <td><a class="btn btn-success" href="/admin/users/{{id}}/edit">Edit</a></td>
+                    <td><a class="btn btn-danger" href="/admin/users/{{id}}/delete">Delete</a>
                     
                     {{!-- <form action="/admin/posts/{{id}}/delete?_method=DELETE" method="POST">
                         <button type="submit" class="btn btn-danger">Delete</button>

@@ -68,8 +68,31 @@
             </div>
           </form>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
-            <i class="fa fa-fw fa-sign-out"></i>Logout</a>
+   
+         <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle mr-lg-2" id="logs" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+             {{#if user}} 
+                {{#if user.file}} <img src="/uploads/{{user.file}}" width="25" class="img-circle" alt=""> 
+                {{else}} 
+                  <img src="/uploads/default.png" width="25" alt=""> 
+                {{/if}}
+                
+                {{user.fullname}} 
+             {{/if}}
+          </a>
+          <div class="dropdown-menu" aria-labelledby="logs"> 
+            <h6 class="dropdown-header">Active Logs:</h6>
+            <div class="dropdown-divider"></div> 
+            
+           <a class="dropdown-item" data-toggle="modal" data-target="#exampleModal">
+              <span class="text-success">
+                <strong>
+                   <i class="fa fa-fw fa-sign-out"></i>Logout
+              </span>
+            </a>
+            <div class="dropdown-divider"></div> 
+
+          </div>
         </li>
+
       </ul>

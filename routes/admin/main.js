@@ -1,5 +1,13 @@
 const express = require('express');
 const router = express.Router();
+// const {userAuth} = require('../../helpers/authenticate')
+
+// router.all('/*', userAuth, (req, res, next)=>{
+
+//     req.app.locals.layout = 'admin';
+//     next();
+// })
+
 
 router.all('/*', (req, res, next)=>{
 

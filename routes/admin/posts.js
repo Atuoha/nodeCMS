@@ -6,10 +6,12 @@ const { isEmpty, uploadDir } = require('../../helpers/upload-helper');
 const path = require('path');
 const fs = require('fs');
 const Category = require('../../models/Category')
+const {userAuth} = require('../../helpers/authenticate')
+
 
 
 //settting default layout
-router.all('/*', (req, res, next)=>{
+router.all('/*',  (req, res, next)=>{
 
     req.app.locals.layout = 'admin';
     next();
