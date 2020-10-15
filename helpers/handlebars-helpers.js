@@ -11,5 +11,12 @@ module.exports = {
     generate_date: function(date, format){
         
         return moment(date).format(format)
-    }
+    },
+
+    ifeq: function(a, b, options){
+        if (a == b) { return options.fn(this); }
+        return options.inverse(this);
+    },
+
+    
 }

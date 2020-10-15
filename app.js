@@ -11,7 +11,8 @@ const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-acce
 const upload = require('express-fileupload');
 const session = require('express-session');
 const flash = require('connect-flash')
-const passport = require('passport')
+const passport = require('passport');
+// const eq = require('ember-truth-helpers')
 // const {mongoDbURl} = require('./config/database')
 
 
@@ -25,7 +26,7 @@ app.use(express.static(path.join(__dirname, 'public'))) // Loading Static files 
 
 
 // custom select handlebars function
-const {select, generate_date} = require('./helpers/handlebars-helpers')
+const {select, generate_date, ifeq} = require('./helpers/handlebars-helpers')
 
 
 
@@ -33,13 +34,18 @@ const {select, generate_date} = require('./helpers/handlebars-helpers')
 app.engine('handlebars', handlebars(
     {
         defaultLayout: 'home',
-        helpers:{select: select, generate_date: generate_date},
+        helpers:{select: select, generate_date: generate_date, ifeq: ifeq},
         partialsDir: path.join(__dirname, "views/layouts/partials"),
         handlebars: allowInsecurePrototypeAccess(Handlebars)
     
     }
     
 ))
+
+
+// registering a helper
+
+
 
 // upload middleware
 app.use(upload())
@@ -107,6 +113,10 @@ app.use('/admin/categories', category)
 // -- admin users
 const user = require('./routes/admin/user');
 app.use('/admin/users', user);
+
+// -- comments
+const comment =  require('./routes/admin/comment')
+app.use('/comments', comment)
 
 app.listen(port, ()=>{
     console.log(`listening to port: ${port}`)

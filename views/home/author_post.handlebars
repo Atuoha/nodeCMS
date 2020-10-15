@@ -4,8 +4,9 @@
 <div class="col-md-8">
 
     <h3 class="my-4">N0deCMS 
-    <small>...building blocks</small>
+    <small>Posts authored by: <b> {{author.fullname}} </b> </small>
     </h3>
+{{#if posts}}
 
  {{#each posts}}
     <!-- Blog Post -->
@@ -24,6 +25,7 @@
 
 {{/each}}    
 
+
     <!-- Pagination -->
     <ul class="pagination justify-content-center mb-4">
     <li class="page-item">
@@ -33,6 +35,10 @@
         <a class="page-link" href="#">Newer &rarr;</a>
     </li>
     </ul>
+
+{{else}}
+    <div class="alert alert-danger">No Post(s) Authored by <b> {{author.fullname}} </b> </div>
+{{/if}}
 
 </div>
 

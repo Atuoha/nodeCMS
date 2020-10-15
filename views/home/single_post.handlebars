@@ -13,7 +13,7 @@
           <!-- Author -->
           <p class="lead">
             by
-            <a href="#">Tony Atuoha</a>
+           <a href="javascript:void(0)">{{post.user.fullname}}</a>
           </p>
 
           <hr>
@@ -46,17 +46,25 @@
           <hr>
 
           <!-- Comments Form -->
+          {{#if user}}
           <div class="card my-4">
             <h5 class="card-header">Leave a Comment:</h5>
+            {{#if success_msg}}
+              <div class="alert alert-success">{{ success_msg }}</div>
+            {{/if}}
             <div class="card-body">
-              <form>
+              <form method="post" action="/comments/create">
                 <div class="form-group">
-                  <textarea class="form-control" rows="3"></textarea>
+                  <textarea class="form-control" rows="3" name="msg" required></textarea>
+                  <input type="hidden" name="post_id" value="{{post.id}}">
+                  <input type="hidden" name="user_id" value="{{user.id}}">
+
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </form>
             </div>
           </div>
+          {{/if}}
 
           <!-- Single Comment -->
          <div class="media mb-4">

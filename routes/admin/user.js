@@ -40,8 +40,8 @@ router.post('/generate-fake-users', (req, res)=>{
     for(let i = 0; i < req.body.numbers; i++){
 
         const newUser = new User({
-            fullname: faker.name.firstName + faker.name.lastName,
-            email: faker.internet.email,
+            fullname: faker.name.firstName() + ' ' + faker.name.lastName(),
+            email: faker.internet.email(),
             status: 'Active',
             role: 'Subscriber',
             password: 'secret',
@@ -60,6 +60,9 @@ router.post('/generate-fake-users', (req, res)=>{
                     req.flash('success_msg', 'Users created successfully :)');
                     res.redirect('/admin/users')
                 })
+                 .catch(err =>{
+                     console.log(`eRROR with saving dummy users: ${err}`)
+                 })
             })
         })
     

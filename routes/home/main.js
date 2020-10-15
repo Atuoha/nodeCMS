@@ -15,6 +15,7 @@ router.all('/*', (req, res, next)=>{
 router.get('/', (req, res)=>{
 
     Post.find()
+    .populate('user')
     .then(posts =>{
         Category.find()
         .then(categories => {
@@ -30,6 +31,7 @@ router.get('/', (req, res)=>{
 router.get('/single_post/:id', (req, res)=>{   
 
     Post.findOne({_id: req.params.id})
+    .populate('user')
     .then(post =>{
         Category.find()
         .then(categories => {
@@ -42,8 +44,44 @@ router.get('/single_post/:id', (req, res)=>{
 })
 
 
+//pulling post by category id
 router.get('/cat/:id', (req, res)=>{
-    // Post.find()
+
+    Post.find({category: req.params.id})
+    .populate('user')
+    .populate('category')
+    .then(posts=>{
+        Category.find()
+        .then(categories=>{
+            Category.findOne({_id: req.params.id})
+            .then(cat=>{
+                res.render('home/category_post', {posts: posts, categories: categories, cat: cat})
+                console.log(`Posts: ${posts}`)
+            })
+            
+        })
+        
+    })
+    .catch(err=> console.log(err))
+})
+
+// pulling post by user_id
+router.get('/author_post/:id', (req, res)=>{
+
+    Post.find({user: req.params.id})
+    .populate('user')
+    .then(posts=>{
+        Category.find()
+        .then(categories=>{
+            User.findOne({_id: req.params.id})
+            .then(author=>{
+                res.render('home/author_post', {posts: posts, categories: categories, author: author})
+                console.log(`Posts: ${posts}`)
+            })
+           
+        })
+    })
+    .catch(err=> console.log(err))
 })
 
 router.get('/login', (req, res)=>{

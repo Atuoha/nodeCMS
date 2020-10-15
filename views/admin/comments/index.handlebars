@@ -1,10 +1,12 @@
-<h3>Posts</h3>
+<h3>Comments</h3>
 
-{{> admin/flash_msgs }}
+{{#if success_msg}}
+<div class="alert alert-success">{{ success_msg }}</div>
+{{/if}}
 
 <div class="card ">
     <div class="card-header">
-          <i class="fa fa-table"></i> All Posts
+          <i class="fa fa-table"></i> All Comments
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -12,34 +14,39 @@
                 <thead>
                     <tr>
                     {{!-- <th>Id</th> --}}
-                    <th>Title</th>
-                    <th>Sub</th>
-                    <th>Author</th>
+                    <th>Comment</th>
+                    <th>User</th>
                     <th>Status</th>
-                    <th>Category</th>
-                    <th>Content</th>
-                    <th>Allow Comments</th>
-                    <th>Imagery</th>
                     <th>Date</th>
                     <th>Action</th>
                     </tr>
                 </thead>
                 
                 <tbody>
-                    {{#each posts}}
+                    {{#each comments}}
                     <tr>
                     {{!-- <td>{{id}}</td> --}}
-                    <td>{{title}}</td>
-                    <td>{{sub}}</td>
+                    <td>{{msg}}</td>
                     <td>{{user.fullname}}</td>
                     <td>{{status}}</td>
-                    <td>{{category.title}}</td>
-                    <td>{{body}}</td>
-                    <td>{{allowComments}}</td>
-                    <td><img src="/uploads/{{file}}" width="100" alt=""></td>
                     <td>{{generate_date date 'MMM-Do-Y'}} </td>
-                    <td><a class="btn btn-success" href="/admin/posts/{{id}}/edit">Edit</a></td>
-                    <td><a class="btn btn-danger" href="/admin/posts/{{id}}/delete">Delete</a>
+                    <td>
+
+                        {{#ifeq status "approved"}} 
+                            <form method="post" action="/comments/update/{{id}}">
+                                <input type="hidden" value="unapproved" name="status">
+                                <button class="btn btn-warning" type="submit">Unapprove</button>
+                            </form>
+                        {{/ifeq}}
+                        {{#ifeq status "unapproved"}} 
+                            <form method="post" action="/comments/update/{{id}}">
+                                <input type="hidden" value="approved" name="status">
+                                <button class="btn btn-success" type="submit">Approve</button>
+                            </form>
+                        {{/ifeq}}
+                        
+                    </td>
+                    <td><a class="btn btn-danger" href="/comments/{{id}}/delete">Delete</a>
                     
                     {{!-- <form action="/admin/posts/{{id}}/delete?_method=DELETE" method="POST">
                         <button type="submit" class="btn btn-danger">Delete</button>

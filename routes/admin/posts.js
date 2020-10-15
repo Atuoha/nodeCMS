@@ -23,6 +23,7 @@ router.get('/', (req, res)=>{
 
     Post.find({})
     .populate('category')
+    .populate('user')
     .then(posts=> {
         res.render('admin/posts', {posts: posts})
         // console.log(posts)
@@ -96,13 +97,14 @@ router.post('/create', (req, res)=>{
             allowComments: allowComments,
             file: filename,
             body: req.body.body,
+            user: req.user.id,
             date: new Date(),
         }
     )
     newPost.save()
     .then(post=> {
         console.log(`Sent Post: ${post}`);
-        req.flash('success_msg', `Post :${post.title} has been created :)`)
+        req.flash('success_msg', `Post: ${post.title} has been created :)`)
         // console.log(req.flash('success_msg'));
         res.redirect('/admin/posts')
 
@@ -164,6 +166,8 @@ router.post('/:id/update',  (req, res)=>{
         post.body = req.body.body;
         post.allowComments = allowComments;
         post.file = filename;
+        post.user =  req.user.id;
+
 
         post.save()
          .then(updatedPost =>{
@@ -184,7 +188,9 @@ router.post('/:id/update',  (req, res)=>{
 // router.delete('/:id/delete', (req, res)=>{
 router.get('/:id/delete', (req, res)=>{
 
-    Post.findOne({_id: req.params.id})   //you can still use remove function here but you won't be needing the "post.delete()" again to implement it
+    Post.findOne({_id: req.params.id}) 
+      //you can still use remove function here but you won't be needing the "post.delete()" again to implement it
+      .populate('comments')
     .then(post=>{
         console.log(post)
         if(post.file !== 'img_place.png'){ // I used img_place.png for a default image for dummy post and i don't want to delete it
@@ -192,9 +198,23 @@ router.get('/:id/delete', (req, res)=>{
                 if(err) throw err;
             })
         }
+
+        
        
         post.delete()
          .then(post => {
+
+            if(post.comments.length > 0){
+                post.comments.forEach(comment=>{
+                    comment.delete()
+                    .then(res=>{
+                        console.log(`Comments Deleted ${res}`)
+                    })
+                    .catch(err=>console.log(err))
+                })
+                      
+            }
+
             console.log(`Post Deleted: ${post}`);
             req.flash('success_msg', `${post.title} has been deleted without errors :)`)
             res.redirect('/admin/posts')
@@ -226,6 +246,7 @@ router.post('/generate-fake-posts', (req, res)=>{
         post.allowComments = faker.random.boolean();
         post.body = faker.lorem.sentence();
         post.file = 'img_place.png';
+        post.author = user.id;
         post.date = new Date()
 
         post.save()
