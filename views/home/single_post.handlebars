@@ -14,6 +14,10 @@
           <p class="lead">
             by
            <a href="javascript:void(0)">{{post.user.fullname}}</a>
+           {{#if user}}
+            <a class="btn btn-success" href="/admin/posts/{{post.id}}/edit">Edit</a>
+            <a class="btn btn-danger" href="/admin/posts/{{post.id}}/delete">Delete</a>
+          {{/if}} 
           </p>
 
           <hr>
@@ -46,43 +50,78 @@
           <hr>
 
           <!-- Comments Form -->
-          {{#if user}}
-          <div class="card my-4">
-            <h5 class="card-header">Leave a Comment:</h5>
-            {{#if success_msg}}
-              <div class="alert alert-success">{{ success_msg }}</div>
-            {{/if}}
-            <div class="card-body">
-              <form method="post" action="/comments/create">
-                <div class="form-group">
-                  <textarea class="form-control" rows="3" name="msg" required></textarea>
-                  <input type="hidden" name="post_id" value="{{post.id}}">
-                  <input type="hidden" name="user_id" value="{{user.id}}">
+        {{#if post.allowComments}}
+           {{#if user}}
+              <div class="card my-4">
+                <h5 class="card-header">Leave a Comment:</h5>
+                {{#if success_msg}}
+                  <div class="alert alert-success">{{ success_msg }}</div>
+                {{/if}}
+                <div class="card-body">
+                  <form method="post" action="/comments/create">
+                    <div class="form-group">
+                      <textarea class="form-control" rows="3" name="msg" required></textarea>
+                      <input type="hidden" name="post_id" value="{{post.id}}">
+                      <input type="hidden" name="user_id" value="{{user.id}}">
 
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </form>
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-              </form>
-            </div>
-          </div>
+              </div>
+
+
+            {{else}}
+            <div class="alert alert-danger"> <a href="/login">Sign in</a> to <b>comment</b> :)</div>
+
+
           {{/if}}
 
-          <!-- Single Comment -->
-         <div class="media mb-4">
-                <img class="d-flex mr-3 rounded-circle" width="50" src="/uploads/default.png" alt="">
-                <div class="media-body">
-                    <h5 class="mt-0">John Phils </h5>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex atque numquam reprehenderit quod facere expedita asperiores fuga quia non voluptatum sed distinctio, natus, repellendus dolor dolorum modi mollitia, explicabo officiis..
-
-                    <div class="media mt-4">
-                        <img class="d-flex mr-3 rounded-circle" width="50" src="/uploads/default.png" alt="">
-                        <div class="media-body">
-                        <h5 class="mt-0">Sandra Mattiews</h5>
-                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-                        </div>
-                    </div>
-
+            {{#each post.comments}}
+                <!-- Single Comment -->
+              <div class="media mb-4">
+                  {{#if user.file}}
+                    <img class="d-flex mr-3 rounded-circle" width="50" src="/uploads/{{user.file}}" alt="">
+                    {{else}}
+                    <img class="d-flex mr-3 rounded-circle" width="50" src="/uploads/default.png" alt="">
+                  {{/if}}
+                  <div class="media-body">
+                      <h5 class="mt-0">{{user.fullname}} </h5>
+                      {{msg}}
+                      </div>
                 </div>
-          </div>
+
+             {{/each}}
+
+
+            <div class="media mb-4">
+              <img class="d-flex mr-3 rounded-circle" width="50" src="/uploads/default.png" alt="">
+              <div class="media-body">
+                  <h5 class="mt-0">John Phils </h5>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex atque numquam reprehenderit quod facere expedita asperiores fuga quia non voluptatum sed distinctio, natus, repellendus dolor dolorum modi mollitia, explicabo officiis..
+
+                  
+                      <div class="media mt-4">
+                          <img class="d-flex mr-3 rounded-circle" width="50" src="/uploads/default.png" alt="">
+                          <div class="media-body">
+                          <h5 class="mt-0">Sandra Mattiews</h5>
+                          Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+                          </div>
+                      </div>
+                      
+                  </div>
+            </div>
+                  
+            
+
+
+
+
+            {{else}}
+            <div class="alert alert-danger"> Comments not <b>allowed</b> for this post :/</div>
+
+            {{/if}}
+
 
         </div>
 

@@ -38,6 +38,12 @@
               <a href="/admin/posts">All Posts</a>
             </li>
 
+            {{#if user}}
+              <li>
+                <a href="/admin/posts/myPost/{{user.id}}">My Posts</a>
+              </li>
+            {{/if}}
+
               <li>
               <a href="/admin/posts/create">Create Post</a>
             </li>

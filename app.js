@@ -15,7 +15,7 @@ const passport = require('passport');
 // const eq = require('ember-truth-helpers')
 // const {mongoDbURl} = require('./config/database')
 
-
+mongoose.set('useFindAndModify', false);
 mongoose.Promise = global.Promise;
 
 mongoose.connect('mongodb://localhost:27017/nodeCms', {useNewUrlParser: true, useUnifiedTopology: true })
@@ -43,7 +43,6 @@ app.engine('handlebars', handlebars(
 ))
 
 
-// registering a helper
 
 
 

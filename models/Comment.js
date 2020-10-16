@@ -18,9 +18,9 @@ const CommentSchema = new Schema({
         type: String
     },
 
-    status:{
-        type: String,
-        default: 'Unapprove'
+    approveComments:{
+        type: Boolean,
+        default: 'false'
     },
 
     date:{

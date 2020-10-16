@@ -216,7 +216,7 @@ router.get('/:id/delete', (req, res)=>{
             }
 
             console.log(`Post Deleted: ${post}`);
-            req.flash('success_msg', `${post.title} has been deleted without errors :)`)
+            req.flash('success_msg', `Post: "${post.title}" and related comments has been deleted without errors :)`)
             res.redirect('/admin/posts')
 
         })
@@ -259,8 +259,19 @@ router.post('/generate-fake-posts', (req, res)=>{
         .catch(err => console.log(err))
     }
 
+})
 
 
+// viewing logged in posts
+router.get('/myPost/:id', (req, res)=>{
+
+    Post.find({user: req.params.id})
+    .populate('user')
+    .populate('category')
+    .then(posts=>{
+        res.render('admin/posts/loggedInUser_Post', {posts: posts})
+    })
+    .catch(err=> console.log(err))
 })
 
 // exporting router so that it can be used in app.js

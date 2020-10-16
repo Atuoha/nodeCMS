@@ -32,6 +32,7 @@ router.get('/single_post/:id', (req, res)=>{
 
     Post.findOne({_id: req.params.id})
     .populate('user')
+    .populate({path: 'comments', match:{approveComments: true}, populate:{path: 'user'} })
     .then(post =>{
         Category.find()
         .then(categories => {

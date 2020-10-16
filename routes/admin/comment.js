@@ -13,7 +13,7 @@ router.get('/*', (req, res, next)=>{
 
 router.get('/', (req, res)=>{
 
-    Comment.find()
+    Comment.find({user: req.user.id})
     .populate('user')
     .then(comments=>{
         res.render('admin/comments', {comments: comments})
@@ -21,38 +21,6 @@ router.get('/', (req, res)=>{
     .catch(err=> console.log(err))
 })
 
-// updating comment with unapprove and approve
-router.post('/update/:id', (req, res)=>{
-
-    Comment.findOne({_id: req.params.id})
-    .then(cmnt=>{
-        cmnt.status = req.body.status
-        cmnt.save()
-        .then(savedCmt=>{
-            console.log(`Status updated: ${savedCmt}`);
-            req.flash('success_msg', 'Comment Updated :)');
-            res.redirect('/comments');
-        })
-        .catch(err=>console.log(`Can't find comment due to: ${err}`))
-    })
-    .catch(err=>console.log(`Can't find comment due to: ${err}`))
-})
-
-
-// deleting comment
-router.get('/:id/delete', (req, res)=>{
-
-    Comment.findOne({_id: req.params.id})
-    .then(cmnt=>{
-        cmnt.delete()
-        .then(res=>{
-            req.flash('success_msg', 'Comment deleted successfully :)')
-            res.redirect('/comments');
-        })
-        .catch(err=>console.log(err))        
-    })
-    .catch(err=>console.log(err))
-})
 
 // create comment
 router.post('/create', (req, res)=>{
@@ -80,6 +48,41 @@ router.post('/create', (req, res)=>{
         })
         .catch(err=> console.log(`Error linking with updating post comment field: ${err}`))
     })
+})
+
+
+
+
+// updating comment with unapprove and approve
+router.post('/update/:id', (req, res)=>{
+
+    Comment.findOne({_id: req.params.id})
+    .then(cmnt=>{
+        cmnt.approveComments = req.body.approveComments
+        cmnt.save()
+        .then(savedCmt=>{
+            console.log(`Status updated: ${savedCmt}`);
+            req.flash('success_msg', 'Comment Updated :)');
+            res.redirect('/comments');
+        })
+        .catch(err=>console.log(`Can't find comment due to: ${err}`))
+    })
+    .catch(err=>console.log(`Can't find comment due to: ${err}`))
+})
+
+
+// deleting comment
+router.get('/:id/delete', (req, res)=>{
+
+    Comment.remove({_id: req.params.id})
+        .then(response=>{
+            Post.findOneAndUpdate({comments: req.params.id}, {$pull:{comments: req.params.id}}, (err,data)=>{
+               if(err) console.log(`Error: ${err}`)
+                req.flash('success_msg', 'Comment deleted successfully :)')
+                res.redirect('/comments');
+            })      
+        })
+        .catch(err=>console.log(`Deleting Comment Error ${err}`))        
 })
 
 

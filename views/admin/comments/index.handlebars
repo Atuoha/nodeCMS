@@ -16,9 +16,8 @@
                     {{!-- <th>Id</th> --}}
                     <th>Comment</th>
                     <th>User</th>
-                    <th>Status</th>
                     <th>Date</th>
-                    <th>Action</th>
+                    <th>Status</th>
                     </tr>
                 </thead>
                 
@@ -28,23 +27,27 @@
                     {{!-- <td>{{id}}</td> --}}
                     <td>{{msg}}</td>
                     <td>{{user.fullname}}</td>
-                    <td>{{status}}</td>
                     <td>{{generate_date date 'MMM-Do-Y'}} </td>
-                    <td>
+                    {{!-- <td>
 
-                        {{#ifeq status "approved"}} 
+                        {{#ifeq status "true"}} 
                             <form method="post" action="/comments/update/{{id}}">
-                                <input type="hidden" value="unapproved" name="status">
+                                <input type="hidden" value="false" name="approveComments">
                                 <button class="btn btn-warning" type="submit">Unapprove</button>
                             </form>
                         {{/ifeq}}
-                        {{#ifeq status "unapproved"}} 
+                        {{#ifeq approveComments "false"}} 
                             <form method="post" action="/comments/update/{{id}}">
-                                <input type="hidden" value="approved" name="status">
+                                <input type="hidden" value="true" name="approveComments">
                                 <button class="btn btn-success" type="submit">Approve</button>
                             </form>
                         {{/ifeq}}
                         
+                    </td>  --}}     
+                    {{!-- This code up that is commentted is totoally working fine but the checkbox below handles it better using bootstrap-switch.js library. The implementation code is at the bottom of this page --}}
+
+                    <td>
+                        <input type="checkbox" id="{{id}}" value="" {{#if approveComments}} checked {{/if}} name="approveComments" class="appCmnts">
                     </td>
                     <td><a class="btn btn-danger" href="/comments/{{id}}/delete">Delete</a>
                     
@@ -64,3 +67,46 @@
     </div>       
 </div>
 
+
+
+
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/js/bootstrap-switch.js"></script>
+<script src="/js/sweetalert.min.js"></script>
+<script>
+  $(document).ready(()=>{
+      $('.appCmnts').bootstrapSwitch()
+
+
+     // This shit sends an ajax request to comment's update url to update it's approvals
+      $('.appCmnts').on('switchChange.bootstrapSwitch', function(e, data){
+          let status = data
+          let id = $(this).attr('id')
+          $(this).attr('value', status)
+          console.log(status, id)
+          
+          $.ajax({
+            url: `/comments/update/${id}`,
+            data: {approveComments: status},
+            type: 'Post',
+            cache: false,
+            success: (data=>{
+              if(!data.error){
+                  swal({  //sweetalert.js library
+                        title:  `Status Changed to ${status}`,
+                        text: `Kudos! You've successfully changed the allowComments status to ${status}. `,
+                        icon: "success",    
+                        timer: 5500,
+                        closeOnClickOutside: false  
+                  });
+
+              }
+            })
+          })
+      })
+
+      
+
+  })
+  
+</script>

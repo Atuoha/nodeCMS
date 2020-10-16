@@ -138,12 +138,12 @@ router.post('/:id/update', (req, res)=>{
             file.mv('./public/uploads/' + filename, err=>{
                 if(err)  throw err;
             })
-        }
 
-        if(user.file !== 'default.png' && user.file !== ''){
-            fs.unlink('./public/uploads/' + user.file, err=>{
-                if(err) throw err;
-            })
+            if(user.file !== 'default.png' && user.file !== ''){
+                fs.unlink('./public/uploads/' + user.file, err=>{
+                    if(err) throw err;
+                })
+            }
         }
 
         if(req.body.password){
@@ -192,6 +192,7 @@ router.post('/:id/update', (req, res)=>{
 router.get('/:id/delete', (req, res)=>{
 
     User.findOne({_id: req.params.id})
+    .populate('posts')
     .then(user=>{
         if(user.file !== 'default.png' && user.file !== ''){
             fs.unlink('./public/uploads/' + user.file, err=>{
@@ -201,7 +202,12 @@ router.get('/:id/delete', (req, res)=>{
 
         user.delete()
         .then(user=>{
-            req.flash('success_msg', 'User deleted successfully :)')
+            if(user.posts > 0){
+                user.posts.forEach(post=>{
+                    post.remove()
+                })
+            }
+            req.flash('success_msg', 'User and related posts deleted successfully :)')
             res.redirect('/admin/users')
         })
     })
