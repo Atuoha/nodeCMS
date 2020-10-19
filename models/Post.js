@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const URLSlug = require('mongoose-url-slugs')
 
 const PostSchema = new Schema({
 
@@ -53,6 +54,10 @@ const PostSchema = new Schema({
     user:{
         type: Schema.Types.ObjectId,
         ref: 'users'
+    },
+
+    slug:{
+        type: String
     }
 
 })

@@ -79,7 +79,7 @@ app.use( (req, res, next)=>{
     res.locals.success_msg = req.flash('success_msg');
     res.locals.error_msg = req.flash('error_msg');
     res.locals.error = req.flash('error');
-    res.locals.user = req.user || null
+    res.locals.loggedUser = req.user || null
 
     next();
 })
@@ -116,6 +116,10 @@ app.use('/admin/users', user);
 // -- comments
 const comment =  require('./routes/admin/comment')
 app.use('/comments', comment)
+
+// -- replies
+const replies = require('./routes/admin/reply');
+app.use('/replies', replies);
 
 app.listen(port, ()=>{
     console.log(`listening to port: ${port}`)

@@ -1,5 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const User = require('../..//models/User')
+const Post = require('../..//models/Post')
+const Comment = require('../..//models/Comment')
+const Reply = require('../..//models/Reply')
+const Category = require('../..//models/Category')
+
 // const {userAuth} = require('../../helpers/authenticate')
 
 // router.all('/*', userAuth, (req, res, next)=>{
@@ -16,7 +22,25 @@ router.all('/*', (req, res, next)=>{
 })
 
 router.get('/', (req, res)=>{
-    res.render('admin/index')
+
+    User.countDocuments()
+    .then(users=>{
+        Post.countDocuments()
+        .then(posts=>{
+            Comment.countDocuments()
+            .then(comments=>{
+                Reply.countDocuments()
+                .then(replies=>{
+                    Category.countDocuments()
+                    .then(categories=>{
+                         res.render('admin/index', {users: users, posts: posts, comments: comments, replies:replies, categories:categories})
+                    })
+                })
+            })
+        })
+    })
+    
+   
 
     // Session Usage
     // req.session.tony = "Atuoha Anthony";

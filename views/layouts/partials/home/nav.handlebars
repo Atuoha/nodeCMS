@@ -13,17 +13,17 @@
               </a>
             </li>
             
-            {{#if user}}
+            {{#if loggedUser}}
               <li class="nav-item">
-                {{#if user.file}}
+                {{#if loggedUser.file}}
                 <a class="nav-link" href="/admin">
-                <img width="20" class="rounded-circle" src="/uploads/{{user.file}}">  
-                {{user.fullname}}
+                <img width="20" class="rounded-circle" src="/uploads/{{loggedUser.file}}">  
+                {{loggedUser.fullname}}
                 </a>
                {{else}}
                 <a class="nav-link" href="/admin">
                 <img width="20" class="rounded-circle" src="/uploads/default.png">  
-                {{user.fullname}}
+                {{loggedUser.fullname}}
                 </a>
                {{/if}}
               

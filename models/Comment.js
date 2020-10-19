@@ -24,7 +24,13 @@ const CommentSchema = new Schema({
     },
 
     date:{
-        type: Date
-    }
+        type: Date,
+        default: new Date()
+    },
+
+    replies:[{
+        type: Schema.Types.ObjectId,
+        ref: 'replies'
+    }]
 })
 module.exports = mongoose.model('comments', CommentSchema)

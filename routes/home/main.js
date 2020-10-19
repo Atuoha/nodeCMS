@@ -3,6 +3,7 @@ const router = express.Router();
 const Post = require('../../models/Post')
 const Category = require('../../models/Category')
 const User = require('../../models/User');
+const Reply = require('../../models/Reply');
 const bcrypt =  require('bcryptjs')
 const passport  = require('passport');
 const LocalStrategy = require('passport-local').Strategy
@@ -33,10 +34,24 @@ router.get('/single_post/:id', (req, res)=>{
     Post.findOne({_id: req.params.id})
     .populate('user')
     .populate({path: 'comments', match:{approveComments: true}, populate:{path: 'user'} })
+    .populate({path: 'comments', match:{approveComments: true}, populate:{path: 'replies'} })
+    .populate('user')
+
+
     .then(post =>{
         Category.find()
-        .then(categories => {
-         res.render('home/single_post', {post: post, categories: categories})
+        .then(categories => {        
+            res.render('home/single_post', {post: post, categories: categories})
+
+            // post.comments.forEach(cmnt=>{
+            //     Reply.find({comment: cmnt.id})
+            //     .populate('user')
+            //     .then(cmntReplies=>{
+            //         console.log(cmntReplies)
+            //       res.render('home/single_post', {post: post, categories: categories, cmntReplies: cmntReplies})
+            //     })
+            //  })
+            // This pulles out the respective replies for each comment but on the view, handlebars doesn't allow me to loop through it inside comment loopping structure so I'm not using it
         }) 
         .catch(err => console.log(`Error with Categories ${err}`))
     })
@@ -126,9 +141,6 @@ router.post('/register', (req, res)=>{
             errors: errors,
             fullname: req.body.fullname,
             email: req.body.email,
-            
-            
-        
         }
         )
     }else{

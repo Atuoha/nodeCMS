@@ -38,9 +38,9 @@
               <a href="/admin/posts">All Posts</a>
             </li>
 
-            {{#if user}}
+            {{#if loggedUser}}
               <li>
-                <a href="/admin/posts/myPost/{{user.id}}">My Posts</a>
+                <a href="/admin/posts/myPost/{{loggedUser.id}}">My Posts</a>
               </li>
             {{/if}}
 
@@ -61,18 +61,41 @@
           </a>
         </li>
 
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Comments">
-          <a class="nav-link" href="/comments">
+
+
+         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Comments">
+          <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#comments" data-parent="#exampleAccordion">
             <i class="fa fa-fw fa-envelope"></i>
             <span class="nav-link-text">Comments</span>
           </a>
-        </li>
+          <ul class="sidenav-second-level collapse" id="comments">
+            <li>
+              <a href="/comments">All Comments</a>
+            </li>
 
+            {{#if loggedUser}}
+              <li>
+                <a href="/comments/myComments/{{loggedUser.id}}">My Comments</a>
+              </li>
+            {{/if}}
+
+              <li>
+              <a href="/replies">All Replies</a>
+            </li>
+
+             {{#if loggedUser}}
+              <li>
+                <a href="/replies/myReplies/{{loggedUser.id}}">My Replies</a>
+              </li>
+            {{/if}}
+
+          </ul>
+        </li>
 
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="User">
           <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#user" data-parent="#exampleAccordion">
             <i class="fa fa-fw fa-user"></i>
-            <span class="nav-link-text">{{#if user}} {{user.fullname}} {{/if}}</span>
+            <span class="nav-link-text">{{#if loggedUser}} {{loggedUser.fullname}} {{/if}}</span>
           </a>
           <ul class="sidenav-second-level collapse" id="user">
             <li>

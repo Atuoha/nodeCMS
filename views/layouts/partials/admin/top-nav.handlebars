@@ -71,13 +71,13 @@
    
          <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle mr-lg-2" id="logs" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-             {{#if user}} 
-                {{#if user.file}} <img  src="/uploads/{{user.file}}" width="25" class="rounded-circle" alt=""> 
+             {{#if loggedUser}} 
+                {{#if loggedUser.file}} <img  src="/uploads/{{loggedUser.file}}" width="25" class="rounded-circle" alt=""> 
                 {{else}} 
                   <img src="/uploads/default.png" width="25" alt=""> 
                 {{/if}}
                 
-                {{user.fullname}} 
+                {{loggedUser.fullname}} 
              {{/if}}
           </a>
           <div class="dropdown-menu" aria-labelledby="logs"> 

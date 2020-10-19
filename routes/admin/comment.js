@@ -11,12 +11,24 @@ router.get('/*', (req, res, next)=>{
     next();
 })
 
+// pulling all comments
 router.get('/', (req, res)=>{
 
-    Comment.find({user: req.user.id})
+    Comment.find()
     .populate('user')
     .then(comments=>{
         res.render('admin/comments', {comments: comments})
+    })
+    .catch(err=> console.log(err))
+})
+
+//pulling logged in user comments
+router.get('/myComments/:id', (req, res)=>{
+
+    Comment.find({user: req.params.id})
+    .populate('user')
+    .then(comments=>{
+        res.render('admin/comments/loggedInUser_Comments', {comments: comments})
     })
     .catch(err=> console.log(err))
 })
@@ -75,12 +87,22 @@ router.post('/update/:id', (req, res)=>{
 router.get('/:id/delete', (req, res)=>{
 
     Comment.remove({_id: req.params.id})
+    .populate('replies')
         .then(response=>{
-            Post.findOneAndUpdate({comments: req.params.id}, {$pull:{comments: req.params.id}}, (err,data)=>{
-               if(err) console.log(`Error: ${err}`)
-                req.flash('success_msg', 'Comment deleted successfully :)')
-                res.redirect('/comments');
-            })      
+           if(comment.replies.length > 0){
+                comment.replies.forEach(reply=>{
+                    reply.delete()
+                    .then(deletedStatus=>{
+                        Post.findOneAndUpdate({comments: req.params.id}, {$pull:{comments: req.params.id}}, (err,data)=>{
+                            if(err) console.log(`Error: ${err}`)
+                            req.flash('success_msg', 'Comment deleted successfully :)')
+                            res.redirect('/comments');
+                        }) 
+                    })
+                    .catch(err=> console.log(`Couldn't delete replies due to: ${err}`))
+                })
+           }
+                 
         })
         .catch(err=>console.log(`Deleting Comment Error ${err}`))        
 })
