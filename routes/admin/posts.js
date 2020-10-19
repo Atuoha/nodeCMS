@@ -241,12 +241,11 @@ router.post('/generate-fake-posts', (req, res)=>{
 
         post.title = faker.name.title();
         post.sub = faker.random.words();
-        post.category = faker.lorem.word();
         post.status = 'public';
         post.allowComments = faker.random.boolean();
         post.body = faker.lorem.sentence();
         post.file = 'img_place.png';
-        post.author = user.id;
+        post.user = req.user.id;
         post.date = new Date()
 
         post.save()

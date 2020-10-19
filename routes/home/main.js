@@ -29,9 +29,9 @@ router.get('/', (req, res)=>{
 
 
 //single page
-router.get('/single_post/:id', (req, res)=>{   
+router.get('/single_post/:slug', (req, res)=>{   
 
-    Post.findOne({_id: req.params.id})
+    Post.findOne({slug: req.params.slug})
     .populate('user')
     .populate({path: 'comments', match:{approveComments: true}, populate:{path: 'user'} })
     .populate({path: 'comments', match:{approveComments: true}, populate:{path: 'replies'} })

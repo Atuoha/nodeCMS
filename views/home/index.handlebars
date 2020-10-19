@@ -14,7 +14,9 @@
     <div class="card-body">
         <h2 class="card-title">{{title}}</h2>
         <p class="card-text">{{body}}</p>
-        <a href="/single_post/{{id}}" class="btn btn-primary">Read More &rarr;</a>
+        {{!-- <a href="/single_post/{{id}}" class="btn btn-primary">Read More &rarr;</a> --}}
+        <a href="/single_post/{{slug}}" class="btn btn-primary">Read More &rarr;</a>
+
     </div>
     <div class="card-footer text-muted">
         Posted on {{generate_date date 'MMM-Do-Y'}}  by
