@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, 'public'))) // Loading Static files 
 
 
 // custom select handlebars function
-const {select, generate_date, ifeq} = require('./helpers/handlebars-helpers')
+const {select, generate_date, ifeq, paginate} = require('./helpers/handlebars-helpers')
 
 
 
@@ -34,7 +34,7 @@ const {select, generate_date, ifeq} = require('./helpers/handlebars-helpers')
 app.engine('handlebars', handlebars(
     {
         defaultLayout: 'home',
-        helpers:{select: select, generate_date: generate_date, ifeq: ifeq},
+        helpers:{select: select, generate_date: generate_date, ifeq: ifeq, paginate: paginate},
         partialsDir: path.join(__dirname, "views/layouts/partials"),
         handlebars: allowInsecurePrototypeAccess(Handlebars)
     
@@ -95,31 +95,38 @@ app.use( (req, res, next)=>{
 const home = require('./routes/home/main')
 app.use('/', home)
 
+
 // --admin
 const admin =  require('./routes/admin/main');
 app.use('/admin', admin)
 // 
+
 
 // -- admin posts
 const posts = require('./routes/admin/posts');
 app.use('/admin/posts', posts)
 // 
 
+
 // -- admin categories
 const category = require('./routes/admin/category');
 app.use('/admin/categories', category)
+
 
 // -- admin users
 const user = require('./routes/admin/user');
 app.use('/admin/users', user);
 
+
 // -- comments
 const comment =  require('./routes/admin/comment')
 app.use('/comments', comment)
 
+
 // -- replies
 const replies = require('./routes/admin/reply');
 app.use('/replies', replies);
+
 
 app.listen(port, ()=>{
     console.log(`listening to port: ${port}`)

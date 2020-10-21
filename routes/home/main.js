@@ -15,13 +15,24 @@ router.all('/*', (req, res, next)=>{
 
 router.get('/', (req, res)=>{
 
+    const perPage = 10;
+    const page = req.query.page || 1;
+
     Post.find()
     .populate('user')
+
+    .skip((perPage * page) - perPage)
+    .limit(perPage)
+    
     .then(posts =>{
-        Category.find()
-        .then(categories => {
-         res.render('home/index', {posts: posts, categories: categories})
-        }) 
+        Post.countDocuments()
+        .then(postCount=>{
+            Category.find()
+            .then(categories => {
+             res.render('home/index', {posts: posts, categories: categories, current: parseInt(page), pages: Math.ceil(postCount/ perPage)})
+            }) 
+            .catch(err => console.log(`Error with Categories ${err}`))
+        })
         .catch(err => console.log(`Error with Categories ${err}`))
     })
     .catch(err => console.log(err))

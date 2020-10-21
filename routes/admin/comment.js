@@ -86,22 +86,30 @@ router.post('/update/:id', (req, res)=>{
 // deleting comment
 router.get('/:id/delete', (req, res)=>{
 
-    Comment.remove({_id: req.params.id})
+    Comment.findOne({_id: req.params.id})
     .populate('replies')
-        .then(response=>{
+        .then(comment=>{
            if(comment.replies.length > 0){
                 comment.replies.forEach(reply=>{
                     reply.delete()
                     .then(deletedStatus=>{
                         Post.findOneAndUpdate({comments: req.params.id}, {$pull:{comments: req.params.id}}, (err,data)=>{
                             if(err) console.log(`Error: ${err}`)
-                            req.flash('success_msg', 'Comment deleted successfully :)')
-                            res.redirect('/comments');
+
+                            comment.delete()
+                            .then(responsee=>{
+                                console.log('Deleted')
+                                req.flash('success_msg', 'Comment deleted successfully :)')
+                                res.redirect('/comments');
+                            })
+                            .catch(err=> console.log(`Couldn't delete COMMENTS due to: ${err}`))
                         }) 
                     })
                     .catch(err=> console.log(`Couldn't delete replies due to: ${err}`))
                 })
            }
+
+          
                  
         })
         .catch(err=>console.log(`Deleting Comment Error ${err}`))        

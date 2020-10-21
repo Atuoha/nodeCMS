@@ -11,7 +11,7 @@ const {userAuth} = require('../../helpers/authenticate')
 
 
 //settting default layout
-router.all('/*',  (req, res, next)=>{
+router.all('/*', userAuth, (req, res, next)=>{
 
     req.app.locals.layout = 'admin';
     next();
@@ -69,7 +69,7 @@ router.post('/create', (req, res)=>{
     if(!isEmpty(req.files)){
 
          // uploading file
-    file = req.files.file
+    let file = req.files.file
     filename = Date.now() + '-' + file.name
     let dirUpload = './public/uploads/'
     file.mv(dirUpload + filename, err=>{
@@ -199,22 +199,20 @@ router.get('/:id/delete', (req, res)=>{
             })
         }
 
+        if(!post.comments.length < 1){
+            post.comments.forEach(comment=>{
+                comment.delete()
+                .then(res=>{
+                    console.log(`Comments Deleted ${res}`)
+                })
+                .catch(err=>console.log(err))
+            })
+                  
+        }
         
        
         post.delete()
          .then(post => {
-
-            if(post.comments.length > 0){
-                post.comments.forEach(comment=>{
-                    comment.delete()
-                    .then(res=>{
-                        console.log(`Comments Deleted ${res}`)
-                    })
-                    .catch(err=>console.log(err))
-                })
-                      
-            }
-
             console.log(`Post Deleted: ${post}`);
             req.flash('success_msg', `Post: "${post.title}" and related comments has been deleted without errors :)`)
             res.redirect('/admin/posts')
@@ -245,18 +243,19 @@ router.post('/generate-fake-posts', (req, res)=>{
         post.allowComments = faker.random.boolean();
         post.body = faker.lorem.sentence();
         post.file = 'img_place.png';
+        post.slug = faker.name.title();
         post.user = req.user.id;
         post.date = new Date()
 
         post.save()
         .then(posts =>{
-            console.log(posts);
+            // console.log(posts);
             req.flash('success_msg', `Created ${req.body.number} dummy post(s) :)`)
-            res.redirect('/admin/posts')
-
         })
         .catch(err => console.log(err))
     }
+    res.redirect('/admin/posts');
+
 
 })
 

@@ -6,7 +6,7 @@
     <h3 class="my-4">N0deCMS 
     <small>...building blocks</small>
     </h3>
-
+{{#if posts}}
  {{#each posts}}
     <!-- Blog Post -->
     <div class="card mb-4">
@@ -31,13 +31,22 @@
 
     <!-- Pagination -->
     <ul class="pagination justify-content-center mb-4">
-    <li class="page-item">
-        <a class="page-link" href="#">&larr; Older</a>
-    </li>
-    <li class="page-item disabled">
-        <a class="page-link" href="#">Newer &rarr;</a>
-    </li>
+        
+        {{#paginate current=current pages=pages}}
+            
+        {{/paginate}}
+
+         {{!-- <li class="page-item">
+                <a class="page-link" href="#">&larr; Older</a>
+            </li>
+            <li class="page-item disabled">
+                <a class="page-link" href="#">Newer &rarr;</a>
+            </li> --}}
     </ul>
+
+    {{#else}}
+        <div class="alert alert-danger">No Posts to Display</div>
+    {{/if}}
 
 </div>
 

@@ -6,12 +6,12 @@ const bcrypt = require('bcryptjs');
 const User = require('../../models/User');
 const faker = require('faker');
 const {isEmpty} = require('../../helpers/upload-helper')
-// const {userAuth} = require('../../helpers/authenticate')
+const {userAuth} = require('../../helpers/authenticate')
 
 
 
 //settting default layout
-router.all('/*',  (req, res, next)=>{
+router.all('/*', userAuth, (req, res, next)=>{
 
     req.app.locals.layout = 'admin';
     next();
@@ -200,13 +200,14 @@ router.get('/:id/delete', (req, res)=>{
             })
         }
 
+        if(user.posts > 0){
+            user.posts.forEach(post=>{
+                post.remove()
+            })
+        }
+
         user.delete()
-        .then(user=>{
-            if(user.posts > 0){
-                user.posts.forEach(post=>{
-                    post.remove()
-                })
-            }
+        .then(user=>{     
             req.flash('success_msg', 'User and related posts deleted successfully :)')
             res.redirect('/admin/users')
         })
