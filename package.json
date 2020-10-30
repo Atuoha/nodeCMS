@@ -24,6 +24,7 @@
     "express-handler": "^0.2.0",
     "express-session": "^1.17.1",
     "faker": "^5.1.0",
+    "handlebars": "^4.7.6",
     "method-override": "^3.0.0",
     "moment": "^2.29.0",
     "mongodb": "^3.6.2",
@@ -35,7 +36,6 @@
     "ws": "^7.3.1"
   },
   "devDependencies": {
-    "handlebars": "^4.7.6",
     "nodemon": "^2.0.4"
   }
 }
