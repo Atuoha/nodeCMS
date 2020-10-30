@@ -7,7 +7,7 @@ const port = 1234 || process.env.Port;
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access');
-// const methodOverride = require('method-override')
+const methodOverride = require('method-override')
 const upload = require('express-fileupload');
 const session = require('express-session');
 const flash = require('connect-flash')
@@ -88,8 +88,8 @@ app.use( (req, res, next)=>{
 
 
 
-// setting method override
-// app.set(methodOverride(_method))
+// override with POST having ?_method=DELETE
+app.use(methodOverride('_method'))
 
 
 // Routes
