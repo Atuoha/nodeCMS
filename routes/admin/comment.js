@@ -54,7 +54,7 @@ router.post('/create', (req, res)=>{
             .then(savedCmt=>{
                 console.log(`Commented: ${savedCmt}`)
                 req.flash('success_msg', 'Your comment has been sent successfully :)');
-                res.redirect(`/single_post/${post.id}`);
+                res.redirect(`/single_post/${post.slug}`);
             })
             .catch(err=> console.log(`Error with saving comment: ${err}`))
         })

@@ -13,12 +13,14 @@ const session = require('express-session');
 const flash = require('connect-flash')
 const passport = require('passport');
 // const eq = require('ember-truth-helpers')
-// const {mongoDbURl} = require('./config/database')
+const {mongoDbURl} = require('./config/database')
 
 mongoose.set('useFindAndModify', false);
 mongoose.Promise = global.Promise;
 
-mongoose.connect('mongodb://localhost:27017/nodeCms', {useNewUrlParser: true, useUnifiedTopology: true })
+// mongoose.connect('mongodb://localhost:27017/nodeCms', {useNewUrlParser: true, useUnifiedTopology: true })
+
+mongoose.connect(mongoDbURl, {useNewUrlParser: true, useUnifiedTopology: true })
     .then(db=> console.log('Connected'))
     .catch(err=> console.log(err))
 

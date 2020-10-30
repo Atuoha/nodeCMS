@@ -42,11 +42,11 @@ router.get('/', (req, res)=>{
     // THis code up is working perfectly fine but the one below refractores it 
 
     const promises = [
-        Post.countDocuments.exec(),
-        Comment.countDocuments.exec(),
-        Reply.countDocuments.exec(),
-        Category.countDocuments.exec(),
-        User.countDocuments.exec()
+        Post.countDocuments().exec(),
+        Comment.countDocuments().exec(),
+        Reply.countDocuments().exec(),
+        Category.countDocuments().exec(),
+        User.countDocuments().exec()
     ];
     Promise.all(promises).then(([posts, comments, replies, categories, users])=>{
         res.render('admin/index', {users: users, posts: posts, comments: comments, replies:replies, categories:categories})

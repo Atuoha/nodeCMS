@@ -30,23 +30,13 @@
 {{/each}}    
 
     <!-- Pagination -->
-    <ul class="pagination justify-content-center mb-4">
-        
-        {{#paginate current=current pages=pages}}
-            
-        {{/paginate}}
-
-         {{!-- <li class="page-item">
-                <a class="page-link" href="#">&larr; Older</a>
-            </li>
-            <li class="page-item disabled">
-                <a class="page-link" href="#">Newer &rarr;</a>
-            </li> --}}
+    <ul class="pagination justify-content-center mb-4"> 
+        {{#paginate current=current pages=pages}}{{/paginate}}
     </ul>
 
-    {{#else}}
-        <div class="alert alert-danger">No Posts to Display</div>
-    {{/if}}
+{{else}}
+    <div class="alert alert-danger">No Post to display</div>   
+{{/if}}
 
 </div>
 
